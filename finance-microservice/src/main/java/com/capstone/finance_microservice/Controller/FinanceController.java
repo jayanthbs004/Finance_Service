@@ -2,54 +2,46 @@ package com.capstone.finance_microservice.Controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.finance_microservice.Model.FinanceDetails;
-import com.capstone.finance_microservice.Service.FinanceService;
-
-import jakarta.validation.Valid;
+import com.capstone.finance_microservice.DTO.EmployeeDTO;
+import com.capstone.finance_microservice.DTO.ProjectDetailsDTO;
+import com.capstone.finance_microservice.DTO.ProjectEmployeeDetailsDTO;
+import com.capstone.finance_microservice.FeignClients.EmployeeServiceClient;
+import com.capstone.finance_microservice.FeignClients.ProjectServiceClient;
 
 @RestController
 @RequestMapping("/api/finance")
 public class FinanceController {
 
-    @Autowired
-    private FinanceService financeService;
+    private final ProjectServiceClient projectServiceClient;
+    private final EmployeeServiceClient employeeServiceClient;
 
-    @PostMapping
-    public ResponseEntity<FinanceDetails> createFinanceDetails(@RequestBody @Valid FinanceDetails financeDetails) {
-        return new ResponseEntity<>(financeService.saveFinanceDetails(financeDetails), HttpStatus.CREATED);
+    public FinanceController(ProjectServiceClient projectServiceClient, EmployeeServiceClient employeeServiceClient) {
+        this.projectServiceClient = projectServiceClient;
+        this.employeeServiceClient = employeeServiceClient;
     }
 
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<FinanceDetails>> getByProjectId(@PathVariable String projectId) {
-        return ResponseEntity.ok(financeService.getFinanceDetailsByProjectId(projectId));
-    }
+    public ResponseEntity<ProjectEmployeeDetailsDTO> getProjectAndEmployeeDetails(
+            @PathVariable String projectId) {
 
-    @GetMapping("/po/{poId}")
-    public ResponseEntity<List<FinanceDetails>> getByPoId(@PathVariable String poId) {
-        return ResponseEntity.ok(financeService.getFinanceDetailsByPoId(poId));
-    }
+        // Fetch project details using Feign client
+        ProjectDetailsDTO projectDetails = projectServiceClient.getProjectById(projectId);
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FinanceDetails> updateFinanceDetails(@PathVariable Long id, @RequestBody @Valid FinanceDetails financeDetails) {
-        return ResponseEntity.ok(financeService.updateFinanceDetails(id, financeDetails));
-    }
+        // Fetch employees for the project using Feign client
+        List<EmployeeDTO> employees = employeeServiceClient.getEmployeesByProjectId(projectId);
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFinanceDetails(@PathVariable Long id) {
-        financeService.deleteFinanceDetails(id);
-        return ResponseEntity.noContent().build();
+        // Combine the project and employee data into a single response
+        ProjectEmployeeDetailsDTO response = new ProjectEmployeeDetailsDTO();
+        response.setProjectDetails(projectDetails);
+        response.setEmployees(employees);
+
+        // Return the response
+        return ResponseEntity.ok(response);
     }
 }
-
