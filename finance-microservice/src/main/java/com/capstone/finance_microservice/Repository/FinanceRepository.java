@@ -9,6 +9,6 @@ import com.capstone.finance_microservice.Model.FinanceDetails;
 
 @Repository
 public interface FinanceRepository extends JpaRepository<FinanceDetails, Long> {
-    List<FinanceDetails> findByProjectId(String projectId);
+    List<FinanceDetails> findByProjectId(Long projectId);
     List<FinanceDetails> findByPoId(String poId);
 }

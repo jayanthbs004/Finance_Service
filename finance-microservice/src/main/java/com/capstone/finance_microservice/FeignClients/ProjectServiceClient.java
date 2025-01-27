@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.capstone.finance_microservice.DTO.ProjectDetailsDTO;
 
-@FeignClient(name = "project-service", url = "http://PROJECT-SERVICE")
+@FeignClient(name = "project-service", url = "http://localhost:3031/api/projects")
 public interface ProjectServiceClient {
 
-    @GetMapping("/api/project/{projectId}")
-    ProjectDetailsDTO getProjectById(@PathVariable("projectId") String projectId);
+    @GetMapping("/{Id}")
+    ProjectDetailsDTO getProjectById(@PathVariable("projectId") Long projectId);
 }
 

@@ -18,7 +18,7 @@ public class FinanceDetails {
     private Long id;
 
     @Column(nullable = false)
-    private String projectId;
+    private Long projectId;
 
     @Column(nullable = false)
     private String poId;
@@ -38,7 +38,7 @@ public class FinanceDetails {
     public FinanceDetails() {
     }
 
-    public FinanceDetails(Long id, String projectId, String poId, Double budget, Double allocatedSalary,
+    public FinanceDetails(Long id, Long projectId, String poId, Double budget, Double allocatedSalary,
             Double remainingBudget, LocalDate createdDate) {
         this.id = id;
         this.projectId = projectId;
@@ -57,11 +57,11 @@ public class FinanceDetails {
         this.id = id;
     }
 
-    public String getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(String projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
