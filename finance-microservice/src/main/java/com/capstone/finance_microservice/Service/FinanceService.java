@@ -39,7 +39,7 @@ public class FinanceService {
     // public List<FinanceDetails> getFinanceDetailsByPoId(String poId) {
     //     return financeRepository.findByPoId(poId);
     // }
-    public FinanceDetails getFinanceDetails(Long poId) {
+    public FinanceDetails getFinanceDetails(String poId) {
         // Fetch project and employee details using the PO ID
         ResponseEntity<Map<String, Object>> response = purchaseOrderClient.getProjectAndEmployeeDetailsByPoId(poId);
         

@@ -22,7 +22,7 @@ public class FinanceController {
     }
 
     @GetMapping("/project-employee-details/{poId}")
-    public ResponseEntity<Map<String, Object>> getProjectAndEmployeeDetailsByPoId(@PathVariable Long poId) {
+    public ResponseEntity<Map<String, Object>> getProjectAndEmployeeDetailsByPoId(@PathVariable String poId) {
         return purchaseOrderServiceClient.getProjectAndEmployeeDetailsByPoId(poId);
     }
 }

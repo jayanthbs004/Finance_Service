@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface PurchaseOrderClient {
 
     @GetMapping("/details/{projectId}")
-    ResponseEntity<Map<String, Object>> getProjectAndEmployeeDetailsByPoId(@PathVariable("projectId") Long projectId);
+    ResponseEntity<Map<String, Object>> getProjectAndEmployeeDetailsByPoId(@PathVariable("projectId") String poId);
 }
